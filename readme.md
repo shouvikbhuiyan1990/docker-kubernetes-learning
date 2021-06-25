@@ -1,4 +1,4 @@
-# Docker Useful Commands
+## Docker Useful Commands
 
 - docker run <image name>
 - Docker run -p <local machine port>:<docker port> <container id/name>
@@ -15,6 +15,7 @@
 
 - docker build . —> builds and gives hash id of image as output
 - docker build -t <docker id>/<image name>:latest .  —> builds and gives output with tagging. This name can be used to create a container
+- docker build -f <custom docker file name>
 
 - Docker-compose up  ———> only docker run
 - Docker-compose up — build  ——> build image and run docker
