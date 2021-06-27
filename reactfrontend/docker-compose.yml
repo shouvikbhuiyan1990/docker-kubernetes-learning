@@ -1,4 +1,4 @@
-version: "3"
+version: "3.8"
 services: 
     react-web:
         build: 
@@ -9,3 +9,11 @@ services:
         volumes: 
             - /apps/node_modules
             - .:/apps
+    react-test:
+        build: 
+            context: .
+            dockerfile: Dockerfile.dev
+        volumes:
+            - /apps/node_modules
+            - .:/apps
+        command: ["npm", "run", "test"]
