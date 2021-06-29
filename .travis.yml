@@ -1,3 +1,4 @@
+language: generic
 services:
   - docker
 
@@ -5,4 +6,4 @@ before_install:
   - docker build -t shouvik446/start-docker -f Dockerfile.dev .
 
 script:
-  - docker run shouvik446/start-docker npm run test -- --coverage
+  - docker run -e CI=true shouvik446/start-docker npm run test
