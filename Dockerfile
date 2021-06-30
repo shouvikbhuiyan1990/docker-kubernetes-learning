@@ -1,4 +1,4 @@
-FROM node:alpine as builder
+FROM node:alpine AS builder
 WORKDIR '/app'
 COPY package.json ./
 RUN npm install
@@ -8,6 +8,6 @@ RUN npm run build
 FROM nginx
 COPY --from=builder /app/build /usr/share/nginx/html
 
-ENV PORT=80
+ENV PORT 80
 EXPOSE 80
 CMD [ "nginx", "-g", "daemon off;"]
