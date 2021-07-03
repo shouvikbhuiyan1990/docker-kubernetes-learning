@@ -1,0 +1,24 @@
+.display-color {
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 0;
+}
+
+.display-color .pill-cont {
+    margin-top: 30px;
+    margin-left: 20px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.display-color .pill-cont:first-child {
+    margin-left: 0;
+}
+
+.display-color .pills {
+    width: 80px;
+    height: 40px;
+    border: 1px solid red;
+    padding: 5px;
+    list-style: none;
+}

@@ -1,0 +1,17 @@
+.input-container {
+    width: 100%;
+    text-align: center;
+}
+.input-container input {
+    width: 100%;
+    padding: 2rem 2rem;
+    font-size: 1.5rem;
+    letter-spacing: 0.4rem;
+    margin-bottom: 20px;
+}
+.input-container .btn-container {
+    display: flex;
+}
+.input-container .btn-container button:first-child {
+    margin-right: 15px;
+}

@@ -1,5 +1,22 @@
 .App {
-  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: column;
+  width: 70%;
+  padding-top: 120px;
+  margin: 0 auto;
+}
+
+.btn {
+  border-radius: 5px;
+  padding: 20px 30px;
+  min-width: 120px;
+  background: transparent;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  font-size: 1.2rem;
 }
 
 .App-logo {
