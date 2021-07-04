@@ -13,7 +13,7 @@ function App() {
   const [searchResults, setSearchResults] = useState([]);
   const recentSearch = async () => {
     try {
-      const { data } = await axios.get('http://localhost:5000/api/recentSearches');
+      const { data } = await axios.get('/api/recentSearches');
       setRecentViews(data.result);
     }
     catch (e) {
@@ -22,7 +22,7 @@ function App() {
   }
   const searchColors = async (text) => {
     let result = [];
-    const { data } = await axios.post('http://localhost:5000/api/closest/colors', {
+    const { data } = await axios.post('/api/closest/colors', {
       "color": text.substring(1, text.length)
     });
     JSON.parse(data.result).forEach((item) => {

@@ -1,6 +1,10 @@
 const redis =  require('redis');
+const keys = require('./keys');
 
-const client = redis.createClient();
+const client = redis.createClient({
+    host: keys.redisHost,
+    port: keys.redisPort
+});
 const sub = client.duplicate();
 
 function findClosestColors(current) {

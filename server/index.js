@@ -1,18 +1,23 @@
 const express = require('express');
+const keys = require('./keys');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const redis = require('redis');
 const { Pool } = require('pg');
 
-const client = redis.createClient();
+
+const client = redis.createClient({
+    host: keys.redisHost,
+    port: keys.redisPort
+});
 const redisPublisher = client.duplicate();
 
 const pgClient = new Pool({
-    user: 'shouvikbhuiyan',
-    host: 'localhost',
-    database: 'testdb',
-    password: 'password',
-    port: 5432,
+    user: keys.pgUser,
+    host: keys.pgHost,
+    database: keys.pgDb,
+    password: keys.pgPassword,
+    port: keys.pgPort,
 });
   
 pgClient.on("connect", (client) => {
@@ -64,7 +69,7 @@ app.get('/', (req, res) => {
     res.send('Hi! these are very simple apis to create multi container docker');
 });
 
-app.post('/api/closest/colors', async (req, res) => {
+app.post('/closest/colors', async (req, res) => {
     const color = req.body.color;
     await pgClient.query("INSERT INTO colors(color, id) VALUES($1, $2)", [color, new Date().toString()]);
     client.hmget('colors', color, function(err, result) {
@@ -83,13 +88,13 @@ app.post('/api/closest/colors', async (req, res) => {
     });
 });
 
-app.get('/api/get/allcolors', (req, res) => {
+app.get('/get/allcolors', (req, res) => {
     client.hgetall('colors', function(err, object) {
         res.send(object);
     });
 });
 
-app.get('/api/recentSearches', async (req, res) => {
+app.get('/recentSearches', async (req, res) => {
     const values = await pgClient.query("SELECT * FROM colors ORDER BY id DESC LIMIT 10");
 
     res.send({
