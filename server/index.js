@@ -19,11 +19,11 @@ const pgClient = new Pool({
     password: keys.pgPassword,
     port: keys.pgPort,
 });
-  
+
 pgClient.on("connect", (client) => {
-client
-    .query("CREATE TABLE IF NOT EXISTS colors (color VARCHAR, id VARCHAR)")
-    .catch((err) => console.error(err));
+    client
+        .query("CREATE TABLE IF NOT EXISTS colors (color VARCHAR, id VARCHAR)")
+        .catch((err) => console.error(err));
 });
 
 const app = express();
@@ -35,7 +35,7 @@ function findClosestColors(current) {
         limit = 200,
         dec = parseInt(current, 16),
         generated = 0;
-    
+
     while (validColors.length < 10 && limit >= 0) {
         let randomModifier = Math.floor(Math.random() * (100 - 2 + 1) + 2);
 
@@ -72,24 +72,25 @@ app.get('/', (req, res) => {
 app.post('/closest/colors', async (req, res) => {
     const color = req.body.color;
     await pgClient.query("INSERT INTO colors(color, id) VALUES($1, $2)", [color, new Date().toString()]);
-    client.hmget('colors', color, function(err, result) {
+    client.hmget('colors', color, function (err, result) {
         if (result && result[0]) {
             res.send({
                 result
             });
         }
         else {
-            redisPublisher.publish('insert', color);
+            const closestColors = findClosestColors(color);
+            redisPublisher.publish('insert', JSON.stringify({ color, closeColors: closestColors }));
             // the code below is not optimised. As worker is in different file for docker demo purpose, this approach has been taken
             res.send({
-                result: findClosestColors(color)
+                result: closestColors
             });
         }
     });
 });
 
 app.get('/get/allcolors', (req, res) => {
-    client.hgetall('colors', function(err, object) {
+    client.hgetall('colors', function (err, object) {
         res.send(object);
     });
 });
