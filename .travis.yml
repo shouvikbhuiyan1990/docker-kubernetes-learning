@@ -1,0 +1,28 @@
+sudo: required
+language: generic
+
+services:
+  - docker
+
+before_install:
+  - docker build -t shouvik446/react-test -f ./frontend/Dockerfile.dev ./frontend
+
+script:
+  - docker run -e CI=true shouvik446/react-test npm run test
+
+after_success:
+  - docker build -t shouvik446/multi-fe ./frontend
+  - docker build -t shouvik446/multi-server ./server
+  - docker build -t shouvik446/multi-worker ./worker
+  - docker build -t shouvik446/nginx ./nginx
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push shouvik446/multi-fe
+  - docker push shouvik446/multi-server
+  - docker push shouvik446/multi-worker
+  - docker push shouvik446/nginx
+
+deploy:
+  on:
+    branch: multicontainer
