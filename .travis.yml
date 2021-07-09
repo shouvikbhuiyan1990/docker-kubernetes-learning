@@ -11,18 +11,27 @@ script:
   - docker run -e CI=true shouvik446/react-test npm run test
 
 after_success:
-  - docker build -t shouvik446/multi-fe ./frontend
+  - docker build -t shouvik446/multi-client ./frontend
   - docker build -t shouvik446/multi-server ./server
   - docker build -t shouvik446/multi-worker ./worker
   - docker build -t shouvik446/nginx ./nginx
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those images and push them to docker hub
-  - docker push shouvik446/multi-fe
+  - docker push shouvik446/multi-client
   - docker push shouvik446/multi-server
   - docker push shouvik446/multi-worker
   - docker push shouvik446/nginx
 
 deploy:
+  provider: elasticbeanstalk
+  region: 'ap-south-1'
+  app: 'multi-docker'
+  env: 'multidocker-env'
+  # s3 bucket name and path
+  bucket_name: 'elasticbeanstalk-ap-south-1-336029064819'
+  bucket_path: 'docker-multi'
   on:
     branch: multicontainer
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
